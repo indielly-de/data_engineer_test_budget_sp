@@ -8,5 +8,6 @@ class Settings(BaseSettings):
    TABLE_ID: str
    PERIOD: str
    CURRENCY: str
+   ENCODING: str = "utf-8"
 
 settings = Settings()

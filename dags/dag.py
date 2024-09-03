@@ -3,6 +3,7 @@ from airflow import DAG
 from airflow.decorators import task
 from airflow.utils.dates import days_ago
 from airflow.operators.empty import EmptyOperator
+from setting import settings
 
 default_args = {
     'owner': 'airflow',
@@ -24,8 +25,8 @@ def transform(df_costs, df_revenues):
     return script.merge_df(df_revenues, df_costs)
 
 @task(task_id='carregando_dados')
-def load_to_bq(df):
-    script.load_bq(df)
+def load_to_bq(df, project_id, table_id):
+    script.load_bq(df, project_id, table_id)
 
 with DAG(
     'orcamento_sp',
@@ -41,4 +42,4 @@ with DAG(
     df = transform(df_costs, df_revenues)
 
     start >> [df_costs, df_revenues] >> df
-    df >> load_to_bq(df) >> end
+    df >> load_to_bq(df, settings.PROJECT_ID, settings.PROJECT_ID) >> end

@@ -1,3 +1,4 @@
+from typing import Any, Dict
 import requests
 import pandas as pd
 from setting import settings
@@ -16,7 +17,7 @@ def get_quotation(currency, period):
 
 def extract_data(csv_file, cols):
     path = f'data/{csv_file}.csv'
-    df = pd.read_csv(path, encoding='utf-8', sep=',', usecols=cols)
+    df = pd.read_csv(path, encoding=settings.ENCODING, sep=',', usecols=cols)
     return df
 
 def transform(df, column_value_name):
@@ -41,5 +42,5 @@ def merge_df(revenue, cost):
     merged['dt_insert'] = pd.Timestamp.now()
     return merged
 
-def load_bq(df: pd.DataFrame):
-    df.to_gbq(destination_table=settings.TABLE_ID, project_id=settings.PROJECT_ID, credentials=credentials, if_exists='replace')
+def load_bq(df: pd.DataFrame, project_id: str, table_id: str):
+    df.to_gbq(destination_table=table_id, project_id=project_id, credentials=credentials, if_exists='replace')

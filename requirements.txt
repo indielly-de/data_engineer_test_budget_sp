@@ -1,0 +1,3 @@
+pandas-gbq
+apache-airflow
+pydantic-settings
